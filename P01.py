@@ -128,7 +128,21 @@ def ButtonTrain_Event():
     messagebox.showinfo(message='train status:' + str(done) + ' at epoch: ' + str(iteration + 1))
 
 def ButtonVerify_Event():
-    global lastPred, desired, pointsX, pointsY, ax, f
+    global lastPred, desired, pointsX, pointsY, ax, f, neuron
+
+    X = np.array ([
+        pointsX,
+        pointsY]) # INPUTS
+    Y = np.array(desired)
+    p = X.shape[1]
+    prediction = np.zeros(p)
+
+    for i in range(p):
+        y_est = neuron.predict(X[:,i].reshape(-1,1))
+        prediction[i] = y_est
+    lastPred = prediction.tolist()
+    
+
     for i in range(len(lastPred)):
         if lastPred[i] == desired[i]:
             if desired[i] == 1:
@@ -196,9 +210,9 @@ buttonVerify.place(relx=0.52, rely=0.80, relheight=0.1, relwidth=0.2)
 
 option = IntVar()
 drawMode = '.r'
-radioClass1 = ttk.Radiobutton(text='or', variable=option, value=1, command=Selection)
+radioClass1 = ttk.Radiobutton(text='red', variable=option, value=1, command=Selection)
 radioClass1.place(relx=0.73, rely=0.80, relheight=0.05, relwidth=0.17)
-radioClass2 = ttk.Radiobutton(text='ob', variable=option, value=2, command=Selection)
+radioClass2 = ttk.Radiobutton(text='blue', variable=option, value=2, command=Selection)
 radioClass2.place(relx=0.73, rely=0.85, relheight=0.05, relwidth=0.17)
 
 #PERCEPTRON
